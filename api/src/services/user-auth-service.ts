@@ -5,6 +5,7 @@ import {UserProfile, securityId} from '@loopback/security';
 import {UserRepository} from '../repositories';
 import {Request} from '@loopback/rest';
 import {User} from '../models';
+import { Console } from 'console';
 
 class UserFields {
   first_name: string;
@@ -39,42 +40,8 @@ export class UserAuthenticationService {
     public userProfileFactory: UserProfileFactory<UserFields>,
   ) {}
 
-  // async verifyCredentials(
-  //   credentials: BasicAuthenticationStrategyCredentials,
-  // ): Promise<User> {
-  //   if (!credentials) {
-  //     throw new HttpErrors.Unauthorized(`'credentials' is null`);
-  //   }
-
-  //   if (!credentials.username) {
-  //     throw new HttpErrors.Unauthorized(`'credentials.username' is null`);
-  //   }
-
-  //   if (!credentials.password) {
-  //     throw new HttpErrors.Unauthorized(`'credentials.password' is null`);
-  //   }
-
-  //   const foundUser = this.userRepository.find(credentials.username);
-  //   if (!foundUser) {
-  //     throw new HttpErrors['Unauthorized'](
-  //       `User with username ${credentials.username} not found.`,
-  //     );
-  //   }
-
-  //   if (credentials.password !== foundUser.password) {
-  //     throw new HttpErrors.Unauthorized('The password is not correct.');
-  //   }
-
-  //   return foundUser;
-  // }
-
   async lookupUser(request: Request) {
-
-    //const user = this.userRepository.find(credentials.username);
-    console.log(request.headers)
-
-
-
+    //const user = this.userRepository.find(request);
   }
 
   convertToUserProfile(request: Request): UserProfile {

@@ -45,7 +45,6 @@ export class ApiApplication extends BootMixin(
     // Set up the custom sequence
     this.sequence(UserAuthenticationSequence);
     this.component(AuthenticationComponent);
-
     this.bind(UserAuthenticationBindings.USER_SERVICE).toClass(UserAuthenticationService);
     this.bind(AuthenticationBindings.USER_PROFILE_FACTORY).to(UserProfileFactoryFunction);
 
