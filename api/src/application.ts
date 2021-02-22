@@ -11,7 +11,6 @@ import path from 'path';
 import {UserAuthenticationSequence} from './sequence';
 import {AuthenticationComponent, registerAuthenticationStrategy, AuthenticationBindings} from '@loopback/authentication';
 import {JWTAuthenticationComponent} from '@loopback/authentication-jwt';
-import {UserAuthenticationStrategy} from './strategies/user-authentication-strategy';
 import {UserAuthenticationBindings} from './keys';
 import {UserAuthenticationService, UserProfileFactoryFunction} from './services/user-auth-service';
 

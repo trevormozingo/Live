@@ -53,14 +53,19 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'NewUser',
-            
+            exclude: ['salt',]
           }),
         },
       },
     })
     user: User,
   ): Promise<User> {
-    return this.userRepository.create(user);
+
+    const secured_user = this.userService.secureUser(user);
+
+    console.log(secured_user)
+
+    return this.userRepository.create(secured_user);
   }
 
   @post('/users/login')
@@ -83,7 +88,7 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'email', 'phone']}),
+          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'salt', 'email', 'phone']}),
         },
       },
     })
@@ -91,10 +96,6 @@ export class UserController {
   ): Promise<{token: string}>  {
 
     const user_found = await this.userRepository.findById(user.username);
-
-
-
-
 
     const user_profile = this.userService.convertToUserProfile(user_found);
     const token = await this.jwtService.generateToken(user_profile);
@@ -108,7 +109,7 @@ export class UserController {
     description: 'User model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'email', 'phone']}),
+        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'salt', 'email', 'phone']}),
       },
     },
   })

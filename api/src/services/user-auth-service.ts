@@ -29,6 +29,19 @@ export class UserAuthenticationService {
     public userProfileFactory: UserProfileFactory<User>,
   ) {}
 
+  secureUser(user: User): User {
+
+    var bcrypt = require('bcryptjs');
+    var salt = bcrypt.genSaltSync(15);
+    var hash = bcrypt.hashSync(user.password, salt);
+
+    const secured_user = user;
+    secured_user.password = hash;
+    secured_user.salt = salt;
+
+    return secured_user;
+  }
+
   convertToUserProfile(user: User): UserProfile {
     return this.userProfileFactory(user);
   }
