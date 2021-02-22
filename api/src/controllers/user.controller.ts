@@ -17,12 +17,15 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
+import {TokenServiceBindings} from '@loopback/authentication-jwt';
 import {inject} from '@loopback/context';
 import {User} from '../models';
 import {UserRepository} from '../repositories';
 import {UserProfile} from '@loopback/security';
 import {SecurityBindings} from '@loopback/security';
-import {authenticate} from '@loopback/authentication';
+import {authenticate, TokenService} from '@loopback/authentication';
+import {UserAuthenticationBindings} from '../keys';
+import {UserAuthenticationService} from '../services/user-auth-service';
 
 export class UserController {
   constructor(
@@ -30,7 +33,13 @@ export class UserController {
     public userRepository : UserRepository,
 
     @inject(SecurityBindings.USER, {optional:true})
-    private userProfile: UserProfile
+    private userProfile: UserProfile,
+
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
+    public jwtService: TokenService,
+
+    @inject(UserAuthenticationBindings.USER_SERVICE)
+    private userService: UserAuthenticationService,
   ) {}
 
   @post('/users')
@@ -52,6 +61,62 @@ export class UserController {
     user: User,
   ): Promise<User> {
     return this.userRepository.create(user);
+  }
+
+  @post('/users/login')
+  @response(200, {
+    description: 'Authentication Token',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            token: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'email', 'phone']}),
+        },
+      },
+    })
+    user: User,
+  ): Promise<{token: string}>  {
+
+    const user_found = await this.userRepository.findById(user.username);
+
+
+
+
+
+    const user_profile = this.userService.convertToUserProfile(user_found);
+    const token = await this.jwtService.generateToken(user_profile);
+
+    return {token};
+  }
+
+  @authenticate('jwt')
+  @get('/users/{id}')
+  @response(200, {
+    description: 'User model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'email', 'phone']}),
+      },
+    },
+  })
+  async findById(
+    @param.path.string('id') id: string,
+    @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
+  ): Promise<User> {
+    return this.userRepository.findById(id, filter);
   }
 
   // @authenticate('user')

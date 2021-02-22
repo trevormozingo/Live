@@ -10,6 +10,7 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import path from 'path';
 import {UserAuthenticationSequence} from './sequence';
 import {AuthenticationComponent, registerAuthenticationStrategy, AuthenticationBindings} from '@loopback/authentication';
+import {JWTAuthenticationComponent} from '@loopback/authentication-jwt';
 import {UserAuthenticationStrategy} from './strategies/user-authentication-strategy';
 import {UserAuthenticationBindings} from './keys';
 import {UserAuthenticationService, UserProfileFactoryFunction} from './services/user-auth-service';
@@ -45,9 +46,8 @@ export class ApiApplication extends BootMixin(
     // Set up the custom sequence
     this.sequence(UserAuthenticationSequence);
     this.component(AuthenticationComponent);
+    this.component(JWTAuthenticationComponent);
     this.bind(UserAuthenticationBindings.USER_SERVICE).toClass(UserAuthenticationService);
     this.bind(AuthenticationBindings.USER_PROFILE_FACTORY).to(UserProfileFactoryFunction);
-
-    registerAuthenticationStrategy(this, UserAuthenticationStrategy);
   }
 }
