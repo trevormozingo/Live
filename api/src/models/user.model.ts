@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model({
-  settings: {strict: true, hiddenProperties: ['password', 'salt']}
+  settings: {strict: true, hiddenProperties: ['password',]}
 })
 
 export class User extends Entity {
@@ -30,12 +30,6 @@ export class User extends Entity {
     required: true,
   })
   password: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  salt: string;
 
   @property({
     type: 'string',

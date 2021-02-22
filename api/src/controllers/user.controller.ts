@@ -26,6 +26,7 @@ import {SecurityBindings} from '@loopback/security';
 import {authenticate, TokenService} from '@loopback/authentication';
 import {UserAuthenticationBindings} from '../keys';
 import {UserAuthenticationService} from '../services/user-auth-service';
+import {HttpErrors} from '@loopback/rest';
 
 export class UserController {
   constructor(
@@ -53,18 +54,25 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(User, {
             title: 'NewUser',
-            exclude: ['salt',]
+
           }),
         },
       },
     })
     user: User,
   ): Promise<User> {
+    const conflictError = "username already in use."
+    const user_found = await this.userRepository.findOne({
+      where: {username: user.username},
+    });
+
+    if (user_found) {
+      throw new HttpErrors.Conflict(conflictError);
+    }
+
+    // NEED TO ADD INPUT VALIDATION HERE
 
     const secured_user = this.userService.secureUser(user);
-
-    console.log(secured_user)
-
     return this.userRepository.create(secured_user);
   }
 
@@ -88,14 +96,27 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'salt', 'email', 'phone']}),
+          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'email', 'phone']}),
         },
       },
     })
     user: User,
   ): Promise<{token: string}>  {
+    const invalidCredentialsError = 'Invalid username or password.';
 
-    const user_found = await this.userRepository.findById(user.username);
+    const user_found = await this.userRepository.findOne({
+      where: {username: user.username},
+    });
+
+    if (!user_found) {
+      throw new HttpErrors.Unauthorized(invalidCredentialsError);
+    }
+
+    const verified = this.userService.verifyUser(user, user_found);
+
+    if (!verified) {
+      throw new HttpErrors.Unauthorized(invalidCredentialsError);
+    }
 
     const user_profile = this.userService.convertToUserProfile(user_found);
     const token = await this.jwtService.generateToken(user_profile);
@@ -109,7 +130,7 @@ export class UserController {
     description: 'User model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'salt', 'email', 'phone']}),
+        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'email', 'phone']}),
       },
     },
   })

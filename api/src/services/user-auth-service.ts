@@ -32,14 +32,23 @@ export class UserAuthenticationService {
   secureUser(user: User): User {
 
     var bcrypt = require('bcryptjs');
-    var salt = bcrypt.genSaltSync(15);
+    var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(user.password, salt);
 
     const secured_user = user;
     secured_user.password = hash;
-    secured_user.salt = salt;
 
     return secured_user;
+  }
+
+  verifyUser(incoming_user: User, requested_user: User): boolean {
+
+    var bcrypt = require('bcryptjs');
+
+    var stored_hash = requested_user.password;
+    var pass_attempt = incoming_user.password;
+
+    return bcrypt.compareSync(pass_attempt, stored_hash);
   }
 
   convertToUserProfile(user: User): UserProfile {
