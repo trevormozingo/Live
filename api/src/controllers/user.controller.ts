@@ -26,12 +26,15 @@ import {SecurityBindings} from '@loopback/security';
 import {authenticate, TokenService} from '@loopback/authentication';
 import {UserAuthenticationBindings} from '../keys';
 import {UserAuthenticationService} from '../services/user-auth-service';
-import {HttpErrors} from '@loopback/rest';
+import {RestBindings, Request, HttpErrors} from '@loopback/rest';
 
 export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository : UserRepository,
+
+    @inject(RestBindings.Http.REQUEST)
+    private request: Request,
 
     @inject(SecurityBindings.USER, {optional:true})
     private userProfile: UserProfile,
@@ -136,9 +139,8 @@ export class UserController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(User, {exclude: 'where'}) filter?: FilterExcludingWhere<User>
   ): Promise<User> {
-    return this.userRepository.findById(id, filter);
+    return this.userRepository.findById(id);
   }
 
   // @authenticate('user')
@@ -240,12 +242,28 @@ export class UserController {
   //   await this.userRepository.replaceById(id, user);
   // }
 
-  // @authenticate('user')
-  // @del('/users/{id}')
-  // @response(204, {
-  //   description: 'User DELETE success',
-  // })
-  // async deleteById(@param.path.string('id') id: string): Promise<void> {
-  //   await this.userRepository.deleteById(id);
-  // }
+  @authenticate('jwt')
+  @del('/users/{id}')
+  @response(204, {
+    description: 'User DELETE success',
+  })
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
+
+    var token = this.request.headers.authorization;
+
+    if (!token) {
+      throw new HttpErrors.Unauthorized("Invalid acccess token.");
+    }
+
+    var username = this.userService.usernameFromToken(token);
+
+    if (username !== id) {
+      throw new HttpErrors.Unauthorized("Unauthorized to modify this resource.");
+    }
+
+    // Expire credentials
+
+    await this.userRepository.deleteById(id);
+  }
+
 }

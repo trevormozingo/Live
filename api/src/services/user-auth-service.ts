@@ -51,6 +51,15 @@ export class UserAuthenticationService {
     return bcrypt.compareSync(pass_attempt, stored_hash);
   }
 
+  usernameFromToken(token: string): string {
+  
+    const parts = token.split('.');
+    var payload = Buffer.from(parts[1], 'base64').toString('utf8');
+    var user_details = JSON.parse(payload);
+
+    return user_details['id'];
+  }
+
   convertToUserProfile(user: User): UserProfile {
     return this.userProfileFactory(user);
   }
