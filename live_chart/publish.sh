@@ -1,0 +1,1 @@
+curl -v --data-binary @live-0.1.0.tgz https://mozingo.jfrog.io/artifactory/live/
