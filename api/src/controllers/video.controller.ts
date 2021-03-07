@@ -26,7 +26,7 @@ export class VideoController {
     public videometaRepository : VideometaRepository,
   ) {}
 
-  @post('/videometas')
+  @post('/videos')
   @response(200, {
     description: 'Videometa model instance',
     content: {'application/json': {schema: getModelSchemaRef(Videometa)}},
@@ -47,7 +47,7 @@ export class VideoController {
     return this.videometaRepository.create(videometa);
   }
 
-  @get('/videometas/count')
+  @get('/videos/count')
   @response(200, {
     description: 'Videometa model count',
     content: {'application/json': {schema: CountSchema}},
@@ -58,7 +58,7 @@ export class VideoController {
     return this.videometaRepository.count(where);
   }
 
-  @get('/videometas')
+  @get('/videos')
   @response(200, {
     description: 'Array of Videometa model instances',
     content: {
@@ -76,7 +76,7 @@ export class VideoController {
     return this.videometaRepository.find(filter);
   }
 
-  @patch('/videometas')
+  @patch('/videos')
   @response(200, {
     description: 'Videometa PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -95,7 +95,7 @@ export class VideoController {
     return this.videometaRepository.updateAll(videometa, where);
   }
 
-  @get('/videometas/{id}')
+  @get('/videos/{id}')
   @response(200, {
     description: 'Videometa model instance',
     content: {
@@ -111,7 +111,7 @@ export class VideoController {
     return this.videometaRepository.findById(id, filter);
   }
 
-  @patch('/videometas/{id}')
+  @patch('/videos/{id}')
   @response(204, {
     description: 'Videometa PATCH success',
   })
@@ -129,7 +129,7 @@ export class VideoController {
     await this.videometaRepository.updateById(id, videometa);
   }
 
-  @put('/videometas/{id}')
+  @put('/videos/{id}')
   @response(204, {
     description: 'Videometa PUT success',
   })
@@ -140,7 +140,7 @@ export class VideoController {
     await this.videometaRepository.replaceById(id, videometa);
   }
 
-  @del('/videometas/{id}')
+  @del('/videos/{id}')
   @response(204, {
     description: 'Videometa DELETE success',
   })
