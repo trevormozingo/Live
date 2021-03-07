@@ -56,8 +56,10 @@
     "@loopback/repository": "^3.4.1",
     "@loopback/rest": "^9.1.3",
     "@loopback/rest-explorer": "^3.1.0",
+    "@loopback/security": "^0.3.7",
     "@loopback/service-proxy": "^3.0.7",
     "loopback-connector-mongodb": "^5.5.0",
+    "loopback-mongo-gridfs": "^2.2.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {

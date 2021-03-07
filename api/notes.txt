@@ -1,0 +1,13 @@
+  @post('/videos/{id}')
+  @response(200, {
+    description: 'Video file',
+    content: {'application/json': {schema: getModelSchemaRef(Video)}},
+  })
+  async upload(
+    @requestBody.file()
+    request: Request,
+    @param.path.string('id') id: string
+  ): Promise<Video> {
+
+    return this.videoRepository.findById(id);
+  }
