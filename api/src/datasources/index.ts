@@ -1,2 +1,3 @@
 export * from './user.datasource';
-export * from './videometa.datasource';
+export * from './video.datasource';
+export * from './files.datasource';

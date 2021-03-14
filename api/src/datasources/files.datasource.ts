@@ -2,11 +2,11 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'videometa',
-  connector: 'mongodb',
+  name: 'files',
+  connector: 'loopback-mongo-gridfs',
   url: '',
-  host: '',
-  port: 0,
+  host: 'localhost',
+  port: 27017,
   user: '',
   password: '',
   database: '',
@@ -18,13 +18,13 @@ const config = {
 // gracefully. The `stop()` method is inherited from `juggler.DataSource`.
 // Learn more at https://loopback.io/doc/en/lb4/Life-cycle.html
 @lifeCycleObserver('datasource')
-export class VideometaDataSource extends juggler.DataSource
+export class FilesDataSource extends juggler.DataSource
   implements LifeCycleObserver {
-  static dataSourceName = 'videometa';
+  static dataSourceName = 'files';
   static readonly defaultConfig = config;
 
   constructor(
-    @inject('datasources.config.videometa', {optional: true})
+    @inject('datasources.config.files', {optional: true})
     dsConfig: object = config,
   ) {
     super(dsConfig);

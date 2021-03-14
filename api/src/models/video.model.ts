@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
-@model({settings: {strict: false}})
-export class Videometa extends Entity {
+@model({settings: {strict: true}, hiddenProperties: ['file_id',]})
+export class Video extends Entity {
   @property({
     type: 'string',
     required: true,
@@ -21,19 +21,31 @@ export class Videometa extends Entity {
   })
   description: string;
 
+  @property({
+    type: 'date',
+    required: true,
+  })
+  date: string;
+
+  // @property({
+  //   type: 'geopoint',
+  //   required: true,
+  // })
+  // location: string;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 
-  constructor(data?: Partial<Videometa>) {
+  constructor(data?: Partial<Video>) {
     super(data);
   }
 }
 
-export interface VideometaRelations {
+export interface VideoRelations {
   // describe navigational properties here
 }
 
-export type VideometaWithRelations = Videometa & VideometaRelations;
+export type VideoWithRelations = Video & VideoRelations;

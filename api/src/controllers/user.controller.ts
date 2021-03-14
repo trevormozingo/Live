@@ -260,7 +260,7 @@ export class UserController {
     if (username !== id) {
       throw new HttpErrors.Unauthorized("Unauthorized to modify this resource.");
     }
-
+    
     // Expire credentials
 
     await this.userRepository.deleteById(id);
