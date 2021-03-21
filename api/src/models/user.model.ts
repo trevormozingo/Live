@@ -1,7 +1,8 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Video} from './video.model';
 
 @model({
-  settings: {strict: true, hiddenProperties: ['password',]}
+  settings: {strict: true, hiddenProperties: ['password','email', 'phone']}
 })
 
 export class User extends Entity {
@@ -43,6 +44,8 @@ export class User extends Entity {
   })
   phone: string;
 
+  @hasMany(() => Video)
+  videos: Video[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

@@ -1,2 +1,2 @@
 export * from './user.controller';
-export * from './video.controller';
+export * from './user-video.controller';

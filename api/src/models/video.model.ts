@@ -1,10 +1,11 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, belongsTo, property, hasMany} from '@loopback/repository';
+import {User} from './user.model';
 
-@model({settings: {strict: true}, hiddenProperties: ['file_id',]})
+@model({settings: {strict: true, hiddenProperties: ['userId', 'file']}})
 export class Video extends Entity {
   @property({
     type: 'string',
-    required: true,
+    required: false,
   })
   name: string;
 
@@ -17,21 +18,26 @@ export class Video extends Entity {
 
   @property({
     type: 'string',
-    required: true,
+    required: false,
   })
   description: string;
 
   @property({
     type: 'date',
-    required: true,
+    required: false,
   })
   date: string;
 
-  // @property({
-  //   type: 'geopoint',
-  //   required: true,
-  // })
-  // location: string;
+  @property({
+    type: 'string',
+  })
+  userId?: string;
+
+  @property({
+    type: 'Object',
+    required: true,
+  })
+  file: string;
 
   // Define well-known properties here
 

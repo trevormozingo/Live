@@ -1,7 +1,8 @@
-import {inject} from '@loopback/core';
-import {DefaultCrudRepository} from '@loopback/repository';
+import {inject, Getter} from '@loopback/core';
+import {DefaultCrudRepository, repository, HasManyRepositoryFactory} from '@loopback/repository';
 import {VideoDataSource} from '../datasources';
-import {Video, VideoRelations} from '../models';
+import {Video, VideoRelations, User} from '../models';
+import {UserRepository} from './user.repository';
 
 export class VideoRepository extends DefaultCrudRepository<
   Video,
@@ -9,7 +10,7 @@ export class VideoRepository extends DefaultCrudRepository<
   VideoRelations
 > {
   constructor(
-    @inject('datasources.video') dataSource: VideoDataSource,
+    @inject('datasources.video') dataSource: VideoDataSource, 
   ) {
     super(Video, dataSource);
   }

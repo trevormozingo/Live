@@ -64,7 +64,7 @@ export class UserController {
     })
     user: User,
   ): Promise<User> {
-    const conflictError = "username already in use."
+    const conflictError = "Username already in use."
     const user_found = await this.userRepository.findOne({
       where: {username: user.username},
     });
@@ -79,7 +79,7 @@ export class UserController {
     return this.userRepository.create(secured_user);
   }
 
-  @post('/users/login')
+  @post('/users/{id}')
   @response(200, {
     description: 'Authentication Token',
     content: {
@@ -99,16 +99,20 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(User, {exclude: ['first_name', 'last_name', 'email', 'phone']}),
+          schema: getModelSchemaRef(User, {
+            exclude: ['first_name', 'last_name', 'username', 'email', 'phone']
+          }),
         },
       },
     })
     user: User,
+
+    @param.path.string('id') id: string,
   ): Promise<{token: string}>  {
     const invalidCredentialsError = 'Invalid username or password.';
 
     const user_found = await this.userRepository.findOne({
-      where: {username: user.username},
+      where: {username: id},
     });
 
     if (!user_found) {
@@ -133,7 +137,9 @@ export class UserController {
     description: 'User model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(User, {includeRelations: true, exclude: ['password', 'email', 'phone']}),
+        schema: getModelSchemaRef(User, {
+          exclude: ['email', 'phone', 'password']
+        }),
       },
     },
   })
@@ -265,5 +271,4 @@ export class UserController {
 
     await this.userRepository.deleteById(id);
   }
-
 }
