@@ -212,7 +212,8 @@ export class UserVideoController {
     })
     video: Partial<Video>,
   ): Promise<Count> {
-    return this.userRepository.videos(id).patch(video);
+
+    return this.userRepository.videos(id).patch(video, {id: video_id});
   }
 
 
