@@ -37,7 +37,7 @@ export class Video extends Entity {
     type: 'Object',
     required: true,
   })
-  file: string;
+  file: any;
 
   // Define well-known properties here
 
