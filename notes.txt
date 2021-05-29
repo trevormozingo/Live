@@ -1,0 +1,62 @@
+App Store.app
+Arcade.app
+Automator.app
+Avid
+Avid_Uninstallers
+Books.app
+Calculator.app
+Calendar.app
+Chess.app
+Contacts.app
+Dashlane.app
+Dictionary.app
+Discord.app
+Docker.app
+FaceTime.app
+Final Cut Pro.app
+Find My.app
+Flux.app
+Font Book.app
+Garmin Express.app
+Google Chrome.app
+Home.app
+Image Capture.app
+Launchpad.app
+Logic Pro.app
+Mail.app
+Maps.app
+Messages.app
+Mission Control.app
+Motion.app
+Music.app
+Native Access.app
+Native Instruments
+News.app
+Nodes.app
+Notes.app
+OBS.app
+Photo Booth.app
+Photos.app
+Pioneer
+Podcasts.app
+Preview.app
+QuickTime Player.app
+reFX Cloud.app
+rekordbox 6
+Reminders.app
+Safari.app
+Sibelius.app
+Siri.app
+Splice.app
+Spotify.app
+Stickies.app
+Stocks.app
+System Preferences.app
+TextEdit.app
+TeXworks.app
+Time Machine.app
+TV.app
+Utilities
+Visual Studio Code.app
+Voice Memos.app
+zoom.us.app
